@@ -45,6 +45,35 @@ class _HomePageState extends State<HomePage> {
     );
   }
 
+  // show window for creating todo
+  void createTodoWidget() async {
+    var _Controller = TextEditingController();
+    showDialog(
+      context: context,
+      builder:
+          (context) => AlertDialog(
+            content: TextField(
+              controller: _Controller,
+              decoration: InputDecoration(border: OutlineInputBorder()),
+            ),
+            actions: [
+              MaterialButton(
+                onPressed: () => Navigator.pop(context),
+                child: Text('Cancel'),
+              ),
+              MaterialButton(
+                onPressed: () async {
+                  await createTodo(_Controller.text, false, context);
+                  _Controller.clear();
+                  Navigator.pop(context);
+                },
+                child: Text('Create'),
+              ),
+            ],
+          ),
+    );
+  }
+
   Future<void> _initializeApp() async {
     await Future.wait<void>([featchUserInfo(), readUserTodo(context)]);
     setState(() {
@@ -62,15 +91,16 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     if (!_isInitialized) {
-      return Scaffold(
-        body: Center(child: CircularProgressIndicator()),
-      );
+      return Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     return Scaffold(
+      appBar: AppBar(title: Text('Home Page'), centerTitle: true),
       body: screens[_selectedIndex],
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(),
-        onPressed: () {},
+        onPressed: () {
+          createTodoWidget();
+        },
         child: Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,

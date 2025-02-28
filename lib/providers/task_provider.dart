@@ -8,7 +8,6 @@ class TaskProvider extends ChangeNotifier {
   List<Todo> get get_todo_list => _todo_list;
 
   Future<void> set_todo_list(List<Todo> todo) async {
-    _todo_list.clear();
     _todo_list.addAll(todo);
     print('taskProvider: $_todo_list');
     notifyListeners();

@@ -21,7 +21,6 @@ Future<void> login(
   final response = await http.post(
     url,
     headers: {'Content-Type': 'application/json'},
-    // emilys1
     // emilyspass
     body: jsonEncode({'username': username, 'password': password}),
   );
@@ -98,6 +97,7 @@ Future<void> readUserTodo(BuildContext context) async {
   if (response.statusCode == 200) {
     final responseData = jsonDecode(response.body);
     List<dynamic> todoJsonList = responseData['todos'];
+    print('todojsonList: $todoJsonList');
     // convert to todo model
     List<Todo> todos = todoJsonList.map((item) => Todo.fromJson(item)).toList();
     print(todos);
@@ -105,6 +105,34 @@ Future<void> readUserTodo(BuildContext context) async {
       context,
       listen: false,
     ).set_todo_list(todos);
+  } else {
+    print('response failed 2');
+  }
+}
+
+Future<void> createTodo(
+  String name,
+  bool isCompleted,
+  BuildContext context,
+) async {
+  final idString = await storage.read(key: 'id');
+  final id = int.parse(idString.toString());
+  final url = Uri.parse('https://dummyjson.com/todos/add');
+
+  final response = await http.post(
+    url,
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({'todo': name, 'completed': isCompleted, 'userId': id}),
+  );
+
+  if (response.statusCode == 201) {
+    List<Todo> todos = parseTodos(response.body);
+    print(todos);
+    try {
+      Provider.of<TaskProvider>(context, listen: false).set_todo_list(todos);
+    } catch (e) {
+      print('Error updating: $e');
+    }
   } else {
     print('response failed 2');
   }

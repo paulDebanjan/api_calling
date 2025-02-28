@@ -23,34 +23,23 @@ class _IndexPageState extends State<IndexPage> {
 
   @override
   Widget build(BuildContext context) {
-    final provider = Provider.of<TaskProvider>(context, listen: false);
+    final provider = Provider.of<TaskProvider>(context);
     List todo_list = provider.get_todo_list;
 
-    print('Home Page List: ${todo_list[0].id}');
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Index'),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () => logout(context),
-          icon: Icon(Icons.logout),
-        ),
-      ),
-      body:
-          todo_list.length != 0
-              ? ListView.builder(
-                itemCount: todo_list.length,
-                itemBuilder: (context, index) {
-                  final todo_item = todo_list[index];
-                  return TodoTile(
-                    taskName: todo_item.todo,
-                    taskCompleted: todo_item.completed,
-                    onChanged: (value) => checkBoxChanged(value, index),
-                    deleteFunction: (value) => deleteFunction(index),
-                  );
-                },
-              )
-              : Container(),
-    );
+    print('Home Page List: ${todo_list.length}');
+    return todo_list.length != 0
+        ? ListView.builder(
+          itemCount: todo_list.length,
+          itemBuilder: (context, index) {
+            final todo_item = todo_list[index];
+            return TodoTile(
+              taskName: todo_item.todo,
+              taskCompleted: todo_item.completed,
+              onChanged: (value) => checkBoxChanged(value, index),
+              deleteFunction: (value) => deleteFunction(index),
+            );
+          },
+        )
+        : Container();
   }
 }
