@@ -13,12 +13,13 @@ class IndexPage extends StatefulWidget {
 
 class _IndexPageState extends State<IndexPage> {
   // check box was tapped
-  void checkBoxChanged(bool? value, int index) {
-    setState(() {});
+  void checkBoxChanged(bool? value, int id) {
+    // print('id: $id and value $value');
+    isCompleteButtonUpdate(id, value ?? false, context);
   }
 
-  void deleteFunction(int index) {
-    setState(() {});
+  void deleteFunction(String index) {
+    deleteTodo(index, context);
   }
 
   @override
@@ -35,8 +36,13 @@ class _IndexPageState extends State<IndexPage> {
             return TodoTile(
               taskName: todo_item.todo,
               taskCompleted: todo_item.completed,
-              onChanged: (value) => checkBoxChanged(value, index),
-              deleteFunction: (value) => deleteFunction(index),
+              onChanged:
+                  (value) => checkBoxChanged(
+                    value,
+                    int.parse(todo_item.id.toString()),
+                  ),
+              deleteFunction:
+                  (value) => deleteFunction(todo_item.id.toString()),
             );
           },
         )

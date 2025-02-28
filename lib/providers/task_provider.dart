@@ -7,9 +7,24 @@ class TaskProvider extends ChangeNotifier {
 
   List<Todo> get get_todo_list => _todo_list;
 
-  Future<void> set_todo_list(List<Todo> todo) async {
+  void set_todo_list(List<Todo> todo) {
     _todo_list.addAll(todo);
     print('taskProvider: $_todo_list');
+    notifyListeners();
+  }
+
+  void updatCheckbox(int id, bool isComplete) {
+    int index = _todo_list.indexWhere((todo) => todo.id == id);
+    if (index != -1) {
+      _todo_list[index] = _todo_list[index].copyWith(completed: isComplete);
+    }
+    notifyListeners();
+  }
+  void deleteTodoFromList(int id) {
+    int index = _todo_list.indexWhere((todo) => todo.id == id);
+    if (index != -1) {
+      _todo_list.removeAt(index);
+    }
     notifyListeners();
   }
 }

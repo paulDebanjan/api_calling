@@ -11,15 +11,6 @@ class FocusePage extends StatefulWidget {
 class _FocusePageState extends State<FocusePage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Focus'),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () => logout(context),
-          icon: Icon(Icons.logout),
-        ),
-      ),
-    );
+    return Center(child: Text('Focus'));
   }
 }

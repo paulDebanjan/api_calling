@@ -11,9 +11,8 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: AppBar(title: Text('Calender'), centerTitle: true,leading: IconButton(
-          onPressed: () => logout(context),
-          icon: Icon(Icons.logout),
-        ),));
+    return Center(
+      child: Text('Calendar'),
+    );
   }
 }

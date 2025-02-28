@@ -3,7 +3,6 @@ import 'package:api_calling/components/my_button.dart';
 import 'package:api_calling/components/my_stack.dart';
 import 'package:api_calling/components/my_textfield.dart';
 import 'package:api_calling/login.dart';
-import 'package:api_calling/pages/auth_page.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {

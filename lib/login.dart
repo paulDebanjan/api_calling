@@ -101,10 +101,7 @@ Future<void> readUserTodo(BuildContext context) async {
     // convert to todo model
     List<Todo> todos = todoJsonList.map((item) => Todo.fromJson(item)).toList();
     print(todos);
-    await Provider.of<TaskProvider>(
-      context,
-      listen: false,
-    ).set_todo_list(todos);
+    Provider.of<TaskProvider>(context, listen: false).set_todo_list(todos);
   } else {
     print('response failed 2');
   }
@@ -135,5 +132,35 @@ Future<void> createTodo(
     }
   } else {
     print('response failed 2');
+  }
+}
+
+Future<void> isCompleteButtonUpdate(int id, bool isComplete, context) async {
+  final url = Uri.parse('https://dummyjson.com/todos/${id}');
+
+  final response = await http.put(
+    url,
+    headers: {'Content-Type': 'application/json'},
+    body: jsonEncode({'completed': isComplete}),
+  );
+  print('UpdateMethod: ${response.statusCode}');
+
+  if (response.statusCode == 200) {
+    Provider.of<TaskProvider>(
+      context,
+      listen: false,
+    ).updatCheckbox(id, isComplete);
+  }
+}
+
+Future<void> deleteTodo(String id, context) async {
+  final url = Uri.parse('https://dummyjson.com/todos/${id}');
+  int idInt = int.parse(id);
+  final response = await http.delete(url);
+  print('Deleted: ${response.statusCode}');
+  print('Id: ${id}');
+
+  if (response.statusCode == 200) {
+    Provider.of<TaskProvider>(context, listen: false).deleteTodoFromList(idInt);
   }
 }

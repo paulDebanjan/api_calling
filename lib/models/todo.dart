@@ -22,6 +22,15 @@ class Todo {
     );
   }
 
+  Todo copyWith({bool? completed}) {
+    return Todo(
+      id: id,
+      todo: todo,
+      completed: completed ?? this.completed,
+      userId: userId,
+    );
+  }
+
   @override
   String toString() {
     return 'Todo(id: $id, todo: $todo, completed: $completed, userId: $userId)';

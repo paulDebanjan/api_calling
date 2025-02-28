@@ -17,15 +17,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Profile'),
-        centerTitle: true,
-        leading: IconButton(
-          onPressed: () => logout(context),
-          icon: Icon(Icons.logout),
-        ),
-      ),
+    return Center(
+      child: Text('Profile'),
     );
   }
 }
