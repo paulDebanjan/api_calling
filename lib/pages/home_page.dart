@@ -1,6 +1,7 @@
 import 'package:api_calling/api_work.dart';
 import 'package:api_calling/pages/calendar_page.dart';
 import 'package:api_calling/pages/focuse_page.dart';
+import 'package:api_calling/pages/index_one.dart';
 import 'package:api_calling/pages/index_page.dart';
 import 'package:api_calling/pages/profile_page.dart';
 import 'package:flutter/material.dart';
@@ -35,7 +36,8 @@ class _HomePageState extends State<HomePage> {
   }
 
   List<Widget> screens = [
-    IndexPage(),
+    // IndexPage(),
+    IndexOne(),
     CalendarPage(),
     FocusePage(),
     ProfilePage(),

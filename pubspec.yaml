@@ -38,7 +38,6 @@ dependencies:
   flutter_secure_storage: ^9.2.4
   provider: ^6.1.2
   flutter_slidable: ^4.0.0
-  drag_and_drop_lists: ^0.4.2
 
 dev_dependencies:
   flutter_test:

@@ -37,4 +37,16 @@ class TaskProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+
+  void updateMyTiles(int oldIndex, int newIndex) {
+    // an adjustment is needed when moving the tile down the list
+    if (oldIndex < newIndex) {
+      newIndex--;
+    }
+    // get the tile we are moving
+    final tile = _todoList.removeAt(oldIndex);
+    // place the tile in the new position
+    _todoList.insert(newIndex, tile);
+    notifyListeners();
+  }
 }
