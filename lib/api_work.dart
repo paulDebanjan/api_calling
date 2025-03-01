@@ -180,11 +180,11 @@ Future<void> isCompleteButtonUpdate(int id, bool isComplete, context) async {
 }
 
 // delete a todo
-Future<void> deleteTodo(String id, context) async {
+Future<void> deleteTodo(int id, context) async {
   final url = Uri.parse('https://dummyjson.com/todos/${id}');
-  int idInt = int.parse(id);
+  // int idInt = int.parse(id);
   final response = await http.delete(url);
   if (response.statusCode == 200) {
-    Provider.of<TaskProvider>(context, listen: false).deleteTodoFromList(idInt);
+    Provider.of<TaskProvider>(context, listen: false).deleteTodoFromList(id);
   }
 }

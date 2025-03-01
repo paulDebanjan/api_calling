@@ -19,9 +19,9 @@ class _IndexPageState extends State<IndexPage> {
   }
 
   // delete option click
-  void deleteFunction(String index) {
-    deleteTodo(index, context);
-  }
+  // void deleteFunction(String index) {
+  //   deleteTodo(index, context);
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +40,8 @@ class _IndexPageState extends State<IndexPage> {
               onChanged:
                   (value) =>
                       checkBoxChanged(value, int.parse(todoItem.id.toString())),
-              deleteFunction: (value) => deleteFunction(todoItem.id.toString()),
+              // deleteFunction: (value) => deleteFunction(todoItem.id.toString()),
+              deleteFunction: (value) => () {},
             );
           },
         )

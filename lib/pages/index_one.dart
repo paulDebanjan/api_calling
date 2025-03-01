@@ -18,49 +18,79 @@ class _IndexOneState extends State<IndexOne> {
     isCompleteButtonUpdate(id, value ?? false, context);
   }
 
+  // delete option click
+  void deleteTodoItem(int index) {
+    deleteTodo(index, context);
+  }
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskProvider>(context);
     List<Todo> todoList = provider.getTodoList;
     print('todolist Lenght: ${todoList.length}');
-    return ReorderableListView(
-      buildDefaultDragHandles: false,
-      onReorder: provider.updateMyTiles,
-      children: [
-        for (int i = 0; i < todoList.length; i++)
-          ReorderableDragStartListener(
-            // Enables dragging from anywhere
-            key: ValueKey('${todoList[i].id}_$i'),
-            index: i,
-            child: Card(
-              // Card makes dragging look smoother
-              color: const Color.fromARGB(255, 228, 108, 108),
-              elevation: 2,
-              margin: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-              child: ListTile(
-                title: Row(
-                  children: [
-                    Checkbox(
-                      value: todoList[i].completed,
-                      onChanged:
-                          (value) => {updateCheckBox(value, todoList[i].id)},
-                    ),
-                    Text(
-                      todoList[i].todo,
-                      style: TextStyle(
-                        decoration:
-                            todoList[i].completed
-                                ? TextDecoration.lineThrough
-                                : TextDecoration.none,
+    return Container(
+      padding: const EdgeInsets.only(right: 25, left: 25),
+      child: ReorderableListView(
+        buildDefaultDragHandles: false,
+        onReorder: provider.updateMyTiles,
+        children: [
+          for (int i = 0; i < todoList.length; i++)
+            ReorderableDragStartListener(
+              // Enables dragging from anywhere
+              key: ValueKey('${todoList[i].id}_$i'),
+              index: i,
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 10.0),
+                child: Card(
+                  // Card makes dragging look smoother
+                  color: Theme.of(context).colorScheme.secondary,
+                  elevation: 2,
+                  margin: const EdgeInsets.symmetric(
+                    vertical: 4,
+                    horizontal: 8,
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(vertical: 5.0),
+                    child: ListTile(
+                      title: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Row(
+                            children: [
+                              Checkbox(
+                                value: todoList[i].completed,
+                                onChanged:
+                                    (value) => {
+                                      updateCheckBox(value, todoList[i].id),
+                                    },
+                              ),
+                              Text(
+                                todoList[i].todo,
+                                style: TextStyle(
+                                  decoration:
+                                      todoList[i].completed
+                                          ? TextDecoration.lineThrough
+                                          : TextDecoration.none,
+                                ),
+                              ),
+                            ],
+                          ),
+                          IconButton(
+                            onPressed: () => deleteTodoItem(todoList[i].id),
+                            icon: Icon(Icons.delete),
+                          ),
+                        ],
+                      ),
+                      contentPadding: const EdgeInsets.symmetric(
+                        horizontal: 16,
                       ),
                     ),
-                  ],
+                  ),
                 ),
-                contentPadding: const EdgeInsets.symmetric(horizontal: 16),
               ),
             ),
-          ),
-      ],
+        ],
+      ),
     );
   }
 }
