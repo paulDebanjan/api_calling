@@ -1,5 +1,5 @@
 import 'package:api_calling/components/todo_tile.dart';
-import 'package:api_calling/login.dart';
+import 'package:api_calling/api_work.dart';
 import 'package:api_calling/providers/task_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -18,6 +18,7 @@ class _IndexPageState extends State<IndexPage> {
     isCompleteButtonUpdate(id, value ?? false, context);
   }
 
+  // delete option click
   void deleteFunction(String index) {
     deleteTodo(index, context);
   }
@@ -25,27 +26,38 @@ class _IndexPageState extends State<IndexPage> {
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskProvider>(context);
-    List todo_list = provider.get_todo_list;
+    List todoList = provider.getTodoList;
 
-    print('Home Page List: ${todo_list.length}');
-    return todo_list.length != 0
+    return todoList.isNotEmpty
         ? ListView.builder(
-          itemCount: todo_list.length,
+          padding: const EdgeInsets.only(bottom: 30),
+          itemCount: todoList.length,
           itemBuilder: (context, index) {
-            final todo_item = todo_list[index];
+            final todoItem = todoList[index];
             return TodoTile(
-              taskName: todo_item.todo,
-              taskCompleted: todo_item.completed,
+              taskName: todoItem.todo,
+              taskCompleted: todoItem.completed,
               onChanged:
-                  (value) => checkBoxChanged(
-                    value,
-                    int.parse(todo_item.id.toString()),
-                  ),
-              deleteFunction:
-                  (value) => deleteFunction(todo_item.id.toString()),
+                  (value) =>
+                      checkBoxChanged(value, int.parse(todoItem.id.toString())),
+              deleteFunction: (value) => deleteFunction(todoItem.id.toString()),
             );
           },
         )
-        : Container();
+        : Center(
+          child: Container(
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Image.asset('lib/assets/index.jpg', width: 300),
+                Text(
+                  'What do you want to do today?',
+                  style: TextStyle(fontSize: 20),
+                ),
+                Text('Tap + add your tasks', style: TextStyle(fontSize: 14)),
+              ],
+            ),
+          ),
+        );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:api_calling/login.dart';
+import 'package:api_calling/api_work.dart';
 import 'package:api_calling/pages/calendar_page.dart';
 import 'package:api_calling/pages/focuse_page.dart';
 import 'package:api_calling/pages/index_page.dart';
@@ -56,9 +56,20 @@ class _HomePageState extends State<HomePage> {
         children: [
           Icon(
             icon,
-            color: _selectedIndex == index ? Colors.blue : Colors.black,
+            color:
+                _selectedIndex == index
+                    ? Colors.blue
+                    : Theme.of(context).colorScheme.inversePrimary,
           ),
-          Text(label),
+          Text(
+            label,
+            style: TextStyle(
+              color:
+                  _selectedIndex == index
+                      ? Colors.blue
+                      : Theme.of(context).colorScheme.inversePrimary,
+            ),
+          ),
         ],
       ),
     );
@@ -66,37 +77,61 @@ class _HomePageState extends State<HomePage> {
 
   // show window for creating todo
   void createTodoWidget() async {
-    var _Controller = TextEditingController();
+    var _controller = TextEditingController();
+    var _focusNode = FocusNode();
     showDialog(
       context: context,
-      builder:
-          (context) => AlertDialog(
-            content: TextField(
-              controller: _Controller,
-              decoration: InputDecoration(border: OutlineInputBorder()),
-            ),
-            actions: [
-              MaterialButton(
-                onPressed: () => Navigator.pop(context),
-                child: Text('Cancel'),
-              ),
-              MaterialButton(
-                onPressed: () async {
-                  await createTodo(_Controller.text, false, context);
-                  _Controller.clear();
-                  Navigator.pop(context);
-                },
-                child: Text('Create'),
-              ),
-            ],
+      builder: (context) {
+        WidgetsBinding.instance.addPostFrameCallback(
+          (_) => _focusNode.requestFocus(),
+        );
+        return Dialog(
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(10),
           ),
+          child: Container(
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.all(25),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Text('Add Task', style: TextStyle(fontSize: 18)),
+                SizedBox(height: 4),
+                TextField(
+                  controller: _controller,
+                  focusNode: _focusNode,
+                  decoration: InputDecoration(border: OutlineInputBorder()),
+                ),
+
+                Row(
+                  children: [
+                    MaterialButton(
+                      onPressed: () => Navigator.pop(context),
+                      child: Text('Cancel'),
+                    ),
+                    MaterialButton(
+                      onPressed: () async {
+                        await createTodo(_controller.text, false, context);
+                        _controller.clear();
+                        Navigator.pop(context);
+                      },
+                      child: Text('Create'),
+                    ),
+                  ],
+                ),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 
   Future<void> _initializeApp() async {
-    await Future.wait<void>([featchUserInfo(), readUserTodo(context)]);
+    await Future.wait<void>([featchUserInfo(), initialReadUserTodo(context)]);
     setState(() {
-      _selectedIndex = 3;
+      _selectedIndex = 0;
       _isInitialized = true;
     });
   }
@@ -114,9 +149,13 @@ class _HomePageState extends State<HomePage> {
       return Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     return Scaffold(
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
         backgroundColor: Colors.transparent,
-        title: Text(appBarName),
+        title: Text(
+          appBarName,
+          style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
+        ),
         centerTitle: true,
         leading: IconButton(
           onPressed: () => logout(context),
@@ -124,7 +163,7 @@ class _HomePageState extends State<HomePage> {
         ),
         actions: [
           Padding(
-            padding: const EdgeInsets.all(4.0),
+            padding: const EdgeInsets.all(8.0),
             child: CircleAvatar(
               radius: 55,
               backgroundImage: AssetImage('lib/assets/man.jpg'),
@@ -134,6 +173,7 @@ class _HomePageState extends State<HomePage> {
       ),
       body: screens[_selectedIndex],
       floatingActionButton: FloatingActionButton(
+        backgroundColor: const Color.fromARGB(255, 134, 135, 231),
         shape: CircleBorder(),
         onPressed: () {
           createTodoWidget();
@@ -142,6 +182,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       bottomNavigationBar: BottomAppBar(
+        color: Theme.of(context).colorScheme.primary,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [

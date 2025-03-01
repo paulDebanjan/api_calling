@@ -1,4 +1,3 @@
-import 'package:api_calling/login.dart';
 import 'package:flutter/material.dart';
 
 class CalendarPage extends StatefulWidget {
@@ -11,8 +10,6 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Text('Calendar'),
-    );
+    return Center(child: Text('Calendar'));
   }
 }

@@ -1,7 +1,7 @@
 import 'package:api_calling/components/profile_link_tile.dart';
 import 'package:api_calling/components/profile_link_title_text.dart';
 import 'package:api_calling/components/profile_task_tile.dart';
-import 'package:api_calling/login.dart';
+import 'package:api_calling/api_work.dart';
 import 'package:api_calling/pages/settings_page.dart';
 import 'package:flutter/material.dart';
 
@@ -18,12 +18,13 @@ class _ProfilePageState extends State<ProfilePage> {
     super.initState();
   }
 
-  String _userName = 'Mathe Hays';
+  final String _userName = 'Mathe Hays';
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: ListView(
+        padding: const EdgeInsets.only(bottom: 30),
         children: [
           Column(
             children: [
@@ -113,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(width: 10),
                       Text(
                         'Logout',
-                        style: TextStyle(fontSize: 21, color: Colors.redAccent),
+                        style: TextStyle(fontSize: 16, color: Colors.redAccent),
                       ),
                     ],
                   ),

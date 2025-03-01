@@ -1,8 +1,9 @@
-import 'package:api_calling/components/external_login_button.dart';
+import 'package:api_calling/components/external_login_button_apple.dart';
+import 'package:api_calling/components/external_login_button_google.dart';
 import 'package:api_calling/components/my_button.dart';
 import 'package:api_calling/components/my_stack.dart';
 import 'package:api_calling/components/my_textfield.dart';
-import 'package:api_calling/login.dart';
+import 'package:api_calling/api_work.dart';
 import 'package:flutter/material.dart';
 
 class LoginPage extends StatefulWidget {
@@ -22,7 +23,7 @@ class _LoginPageState extends State<LoginPage> {
     final passwordController = TextEditingController();
 
     return Scaffold(
-      backgroundColor: Colors.grey.shade900,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -36,8 +37,8 @@ class _LoginPageState extends State<LoginPage> {
                   Text(
                     "Login",
                     style: TextStyle(
-                      fontSize: 26,
-                      fontWeight: FontWeight.bold,
+                      fontSize: 28,
+                      fontWeight: FontWeight.w500,
                       color: Colors.white,
                     ),
                   ),
@@ -48,7 +49,7 @@ class _LoginPageState extends State<LoginPage> {
                   MyTextfield(
                     fieldName: 'Username',
                     controller: usernameController,
-                    hintText: 'Inter your Username',
+                    hintText: 'Enter your Username',
                     obscureText: false,
                   ),
 
@@ -80,7 +81,7 @@ class _LoginPageState extends State<LoginPage> {
                   MyStack(),
                   SizedBox(height: 30),
                   // google login button
-                  ExternalLoginButton(
+                  ExternalLoginButtonGoogle(
                     onTap: () {},
                     buttonName: 'Google',
                     imagePath: 'lib/assets/google.png',
@@ -88,10 +89,14 @@ class _LoginPageState extends State<LoginPage> {
 
                   SizedBox(height: 15),
                   // apple login button
-                  ExternalLoginButton(
+                  ExternalLoginButtonApple(
                     onTap: () {},
                     buttonName: 'Apple',
-                    imagePath: 'lib/assets/apple.png',
+                    image: Image.asset(
+                      'lib/assets/apple.png',
+                      color: Colors.white,
+                      width: 15,
+                    ),
                   ),
 
                   SizedBox(height: 60),

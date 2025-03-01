@@ -8,10 +8,17 @@ class MyStack extends StatelessWidget {
     return Stack(
       alignment: Alignment.center,
       children: [
-        Divider(thickness: 1, color: Colors.grey, height: 20),
+        Divider(
+          thickness: 1,
+          color: Theme.of(context).colorScheme.primary,
+          height: 20,
+        ),
         Container(
-          color: Colors.grey.shade900,
-          child: Text('OR', style: TextStyle(color: Colors.grey)),
+          color: Theme.of(context).colorScheme.surface,
+          child: Text(
+            'OR',
+            style: TextStyle(color: Theme.of(context).colorScheme.primary),
+          ),
         ),
       ],
     );

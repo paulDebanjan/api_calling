@@ -8,7 +8,13 @@ class ProfileLinkTitleText extends StatelessWidget {
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.only(top: 8.0, bottom: 4),
-      child: Text(text, style: TextStyle(fontSize: 14)),
+      child: Text(
+        text,
+        style: TextStyle(
+          fontSize: 13,
+          color: Theme.of(context).colorScheme.inversePrimary,
+        ),
+      ),
     );
   }
 }

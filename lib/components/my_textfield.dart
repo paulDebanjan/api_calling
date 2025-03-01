@@ -18,14 +18,21 @@ class MyTextfield extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Username', style: TextStyle(color: Colors.white)),
+        Text(
+          fieldName,
+          style: TextStyle(
+            color: Theme.of(context).colorScheme.inversePrimary,
+            fontWeight: FontWeight.w400,
+          ),
+        ),
         SizedBox(height: 4),
         TextField(
           controller: controller,
           obscureText: obscureText,
-          style: TextStyle(color: Colors.grey.shade100),
+          style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
           decoration: InputDecoration(
             hintText: hintText,
+            hintStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
             enabledBorder: const OutlineInputBorder(
               borderSide: BorderSide(color: Colors.grey),
             ),

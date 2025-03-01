@@ -9,8 +9,10 @@ import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
 
+// instance of secureStorage
 final storage = FlutterSecureStorage();
 
+// login
 Future<void> login(
   String username,
   String password,
@@ -34,6 +36,7 @@ Future<void> login(
     await storage.write(key: 'refreshToken', value: refreshToken);
     // store id
     await storage.write(key: 'id', value: id.toString());
+
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => HomePage()),
@@ -57,6 +60,7 @@ Future<void> login(
   }
 }
 
+// delete refresh token and logout
 Future<void> logout(BuildContext context) async {
   await storage.delete(key: 'refreshToken');
   Navigator.of(
@@ -69,6 +73,7 @@ Future<String?> readRefreshToken() async {
   return token;
 }
 
+// fetch user info using refreshToken
 Future<void> featchUserInfo() async {
   final url = Uri.parse('https://dummyjson.com/user/me');
   final token = await storage.read(key: 'refreshToken');
@@ -76,20 +81,36 @@ Future<void> featchUserInfo() async {
     url,
     headers: {'Authorization': 'Bearer ${token}'},
   );
-
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
-
     final fullName = data['firstName'] + ' ' + data['lastName'];
-
     await storage.write(key: 'userName', value: fullName);
-
-    print(fullName);
   } else {
     print('response failed 1');
   }
 }
 
+// read todo list from api
+Future<void> initialReadUserTodo(BuildContext context) async {
+  final id = await storage.read(key: 'id');
+  String data = 'https://dummyjson.com/todos/user/${id}';
+
+  final url = Uri.parse(data);
+
+  final response = await http.get(url);
+  if (response.statusCode == 200) {
+    final responseData = jsonDecode(response.body);
+    List<dynamic> todoJsonList = responseData['todos'];
+    // convert to todo model
+    List<Todo> todos = todoJsonList.map((item) => Todo.fromJson(item)).toList();
+
+    Provider.of<TaskProvider>(context, listen: false).intializeList(todos);
+  } else {
+    print('response failed 2');
+  }
+}
+
+// read todo list from api
 Future<void> readUserTodo(BuildContext context) async {
   final id = await storage.read(key: 'id');
   String data = 'https://dummyjson.com/todos/user/${id}';
@@ -100,16 +121,16 @@ Future<void> readUserTodo(BuildContext context) async {
   if (response.statusCode == 200) {
     final responseData = jsonDecode(response.body);
     List<dynamic> todoJsonList = responseData['todos'];
-    print('todojsonList: $todoJsonList');
     // convert to todo model
     List<Todo> todos = todoJsonList.map((item) => Todo.fromJson(item)).toList();
-    print(todos);
-    Provider.of<TaskProvider>(context, listen: false).set_todo_list(todos);
+
+    Provider.of<TaskProvider>(context, listen: false).setTodoList(todos);
   } else {
     print('response failed 2');
   }
 }
 
+// create a todo
 Future<void> createTodo(
   String name,
   bool isCompleted,
@@ -127,9 +148,8 @@ Future<void> createTodo(
 
   if (response.statusCode == 201) {
     List<Todo> todos = parseTodos(response.body);
-    print(todos);
     try {
-      Provider.of<TaskProvider>(context, listen: false).set_todo_list(todos);
+      Provider.of<TaskProvider>(context, listen: false).setTodoList(todos);
     } catch (e) {
       print('Error updating: $e');
     }
@@ -138,6 +158,7 @@ Future<void> createTodo(
   }
 }
 
+// update a todo
 Future<void> isCompleteButtonUpdate(int id, bool isComplete, context) async {
   final url = Uri.parse('https://dummyjson.com/todos/${id}');
 
@@ -148,21 +169,21 @@ Future<void> isCompleteButtonUpdate(int id, bool isComplete, context) async {
   );
   print('UpdateMethod: ${response.statusCode}');
 
-  if (response.statusCode == 200) {
-    Provider.of<TaskProvider>(
-      context,
-      listen: false,
-    ).updatCheckbox(id, isComplete);
-  }
+  // created todo not available in api server for that resion
+  // 'if' condition will not work on local created todo
+  // if (response.statusCode == 200) {
+  Provider.of<TaskProvider>(
+    context,
+    listen: false,
+  ).updatCheckbox(id, isComplete);
+  // }
 }
 
+// delete a todo
 Future<void> deleteTodo(String id, context) async {
   final url = Uri.parse('https://dummyjson.com/todos/${id}');
   int idInt = int.parse(id);
   final response = await http.delete(url);
-  print('Deleted: ${response.statusCode}');
-  print('Id: ${id}');
-
   if (response.statusCode == 200) {
     Provider.of<TaskProvider>(context, listen: false).deleteTodoFromList(idInt);
   }
