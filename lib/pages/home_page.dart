@@ -79,8 +79,10 @@ class _HomePageState extends State<HomePage> {
 
   // show window for creating todo
   void createTodoWidget() async {
-    var _controller = TextEditingController();
+    var _todoNameController = TextEditingController();
+    var _todoDiscriptionController = TextEditingController();
     var _focusNode = FocusNode();
+
     showDialog(
       context: context,
       builder: (context) {
@@ -98,27 +100,66 @@ class _HomePageState extends State<HomePage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                Text('Add Task', style: TextStyle(fontSize: 18)),
+                Text('Add Task', style: TextStyle(fontSize: 19)),
                 SizedBox(height: 4),
                 TextField(
-                  controller: _controller,
+                  controller: _todoNameController,
                   focusNode: _focusNode,
-                  decoration: InputDecoration(border: OutlineInputBorder()),
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    hintText: 'Task',
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
                 ),
+                SizedBox(height: 10),
+                TextField(
+                  controller: _todoDiscriptionController,
+                  decoration: InputDecoration(
+                    enabledBorder: OutlineInputBorder(
+                      borderSide: BorderSide(color: Colors.transparent),
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                      borderSide: BorderSide(
+                        color: Theme.of(context).colorScheme.secondary,
+                      ),
+                    ),
+                    hintText: 'Description',
+                    hintStyle: TextStyle(
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                ),
+                SizedBox(height: 10),
 
                 Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    MaterialButton(
+                    IconButton(
                       onPressed: () => Navigator.pop(context),
-                      child: Text('Cancel'),
+                      icon: Icon(Icons.timer),
                     ),
-                    MaterialButton(
+                    IconButton(
                       onPressed: () async {
-                        await createTodo(_controller.text, false, context);
-                        _controller.clear();
+                        if (_todoNameController.text.isNotEmpty) {
+                          await createTodo(
+                            _todoNameController.text,
+                            false,
+                            context,
+                          );
+                          _todoNameController.clear();
+                        }
                         Navigator.pop(context);
                       },
-                      child: Text('Create'),
+                      icon: Icon(Icons.send, color: Colors.lightBlue),
                     ),
                   ],
                 ),

@@ -2,6 +2,7 @@ import 'package:api_calling/api_work.dart';
 import 'package:api_calling/models/todo.dart';
 import 'package:api_calling/providers/task_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:provider/provider.dart';
 
 class IndexOne extends StatefulWidget {
@@ -23,13 +24,15 @@ class _IndexOneState extends State<IndexOne> {
     deleteTodo(index, context);
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<TaskProvider>(context);
     List<Todo> todoList = provider.getTodoList;
     print('todolist Lenght: ${todoList.length}');
     return Container(
-      padding: const EdgeInsets.only(right: 25, left: 25),
+      padding: const EdgeInsets.only(right: 25, left: 25, top: 30),
       child: ReorderableListView(
         buildDefaultDragHandles: false,
         onReorder: provider.updateMyTiles,
@@ -41,48 +44,53 @@ class _IndexOneState extends State<IndexOne> {
               index: i,
               child: Padding(
                 padding: const EdgeInsets.only(bottom: 10.0),
-                child: Card(
-                  // Card makes dragging look smoother
-                  color: Theme.of(context).colorScheme.secondary,
-                  elevation: 2,
-                  margin: const EdgeInsets.symmetric(
-                    vertical: 4,
-                    horizontal: 8,
-                  ),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 5.0),
-                    child: ListTile(
-                      title: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          Row(
-                            children: [
-                              Checkbox(
-                                value: todoList[i].completed,
-                                onChanged:
-                                    (value) => {
-                                      updateCheckBox(value, todoList[i].id),
-                                    },
-                              ),
-                              Text(
-                                todoList[i].todo,
-                                style: TextStyle(
-                                  decoration:
-                                      todoList[i].completed
-                                          ? TextDecoration.lineThrough
-                                          : TextDecoration.none,
-                                ),
-                              ),
-                            ],
-                          ),
-                          IconButton(
-                            onPressed: () => deleteTodoItem(todoList[i].id),
-                            icon: Icon(Icons.delete),
-                          ),
-                        ],
+                child: Slidable(
+                  endActionPane: ActionPane(
+                    motion: StretchMotion(),
+                    children: [
+                      SlidableAction(
+                        onPressed: (context) => deleteTodoItem(todoList[i].id),
+                        icon: Icons.delete,
+                        backgroundColor: Colors.red.shade300,
+                        borderRadius: BorderRadius.circular(12),
                       ),
-                      contentPadding: const EdgeInsets.symmetric(
-                        horizontal: 16,
+                    ],
+                  ),
+                  child: Card(
+                    // Card makes dragging look smoother
+                    color: Theme.of(context).colorScheme.secondary,
+                    elevation: 2,
+                    margin: const EdgeInsets.symmetric(
+                      vertical: 4,
+                      horizontal: 8,
+                    ),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 5.0),
+                      child: ListTile(
+                        title: Row(
+                          children: [
+                            Checkbox(
+                              shape: CircleBorder(),
+                              value: todoList[i].completed,
+                              onChanged:
+                                  (value) => {
+                                    updateCheckBox(value, todoList[i].id),
+                                  },
+                            ),
+                            Text(
+                              todoList[i].todo,
+                              style: TextStyle(
+                                decoration:
+                                    todoList[i].completed
+                                        ? TextDecoration.lineThrough
+                                        : TextDecoration.none,
+                              ),
+                            ),
+                          ],
+                        ),
+                        contentPadding: const EdgeInsets.symmetric(
+                          horizontal: 16,
+                        ),
                       ),
                     ),
                   ),
