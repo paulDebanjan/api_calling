@@ -29,8 +29,11 @@ Future<void> login(
     final data = jsonDecode(response.body);
     // Extract refresh token
     final refreshToken = data['refreshToken'];
+    final id = data['id'];
     // store refresh token
     await storage.write(key: 'refreshToken', value: refreshToken);
+    // store id
+    await storage.write(key: 'id', value: id.toString());
     Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => HomePage()),
@@ -76,11 +79,11 @@ Future<void> featchUserInfo() async {
 
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
-    final id = data['id'];
+
     final fullName = data['firstName'] + ' ' + data['lastName'];
-    await storage.write(key: 'id', value: id.toString());
+
     await storage.write(key: 'userName', value: fullName);
-    print(id);
+
     print(fullName);
   } else {
     print('response failed 1');
@@ -131,7 +134,7 @@ Future<void> createTodo(
       print('Error updating: $e');
     }
   } else {
-    print('response failed 2');
+    print('response failed 3');
   }
 }
 

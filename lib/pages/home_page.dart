@@ -15,6 +15,24 @@ class HomePage extends StatefulWidget {
 class _HomePageState extends State<HomePage> {
   bool _isInitialized = false;
   int _selectedIndex = 0;
+  String appBarName = '';
+  void changeAppBarName() {
+    switch (_selectedIndex) {
+      case 0:
+        appBarName = 'Index';
+        break;
+      case 1:
+        appBarName = 'Calender';
+        break;
+      case 2:
+        appBarName = 'Focuse';
+      case 3:
+        appBarName = 'Profile';
+        break;
+      default:
+        appBarName = 'Unknown Index';
+    }
+  }
 
   List<Widget> screens = [
     IndexPage(),
@@ -26,6 +44,7 @@ class _HomePageState extends State<HomePage> {
   void _onItemPapped(index) {
     setState(() {
       _selectedIndex = index;
+      changeAppBarName();
     });
   }
 
@@ -77,13 +96,14 @@ class _HomePageState extends State<HomePage> {
   Future<void> _initializeApp() async {
     await Future.wait<void>([featchUserInfo(), readUserTodo(context)]);
     setState(() {
-      _selectedIndex = 0;
+      _selectedIndex = 3;
       _isInitialized = true;
     });
   }
 
   @override
   void initState() {
+    changeAppBarName();
     _initializeApp();
     super.initState();
   }
@@ -94,7 +114,24 @@ class _HomePageState extends State<HomePage> {
       return Scaffold(body: Center(child: CircularProgressIndicator()));
     }
     return Scaffold(
-      appBar: AppBar(title: Text('Home Page'), centerTitle: true),
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        title: Text(appBarName),
+        centerTitle: true,
+        leading: IconButton(
+          onPressed: () => logout(context),
+          icon: Icon(Icons.logout),
+        ),
+        actions: [
+          Padding(
+            padding: const EdgeInsets.all(4.0),
+            child: CircleAvatar(
+              radius: 55,
+              backgroundImage: AssetImage('lib/assets/man.jpg'),
+            ),
+          ),
+        ],
+      ),
       body: screens[_selectedIndex],
       floatingActionButton: FloatingActionButton(
         shape: CircleBorder(),

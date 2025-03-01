@@ -27,4 +27,12 @@ class TaskProvider extends ChangeNotifier {
     }
     notifyListeners();
   }
+  void reorderTodos(int oldIndex, int newIndex) {
+    if (newIndex > oldIndex) {
+      newIndex--;
+    }
+    final item = _todo_list.removeAt(oldIndex);
+    _todo_list.insert(newIndex, item);
+    notifyListeners();
+  }
 }
