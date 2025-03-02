@@ -3,6 +3,7 @@ import 'package:api_calling/pages/calendar_page.dart';
 import 'package:api_calling/pages/focuse_page.dart';
 import 'package:api_calling/pages/index_one.dart';
 import 'package:api_calling/pages/profile_page.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -152,7 +153,6 @@ class _HomePageState extends State<HomePage> {
                               icon: Icon(Icons.timer),
                             ),
                             Text(
-                              // <- THIS TEXT WIDGET NEEDS TO BE UPDATED
                               selectedDate == null || selectedTime == null
                                   ? ""
                                   : "${selectedDate!.day}-${selectedDate!.month}-${selectedDate!.year} ${selectedTime!.format(context)}",
@@ -195,6 +195,7 @@ class _HomePageState extends State<HomePage> {
 
   Future<void> _initializeApp() async {
     await Future.wait<void>([featchUserInfo(), initialReadUserTodo(context)]);
+
     setState(() {
       _selectedIndex = 0;
       _isInitialized = true;
@@ -213,8 +214,8 @@ class _HomePageState extends State<HomePage> {
       initialDate: selectedDate ?? DateTime.now(),
       firstDate: DateTime(2000),
       lastDate: DateTime(2100),
-      helpText: "Select a Date", // 🔹 Change the header text
-      confirmText: "Chose Time", // 🔹 Change "OK" button text
+      helpText: "Select a Date",
+      confirmText: "Chose Time",
       cancelText: "CANCEL",
     );
 
