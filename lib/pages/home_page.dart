@@ -154,10 +154,10 @@ class _HomePageState extends State<HomePage> {
                             Text(
                               // <- THIS TEXT WIDGET NEEDS TO BE UPDATED
                               selectedDate == null || selectedTime == null
-                                  ? "Select Date & Time"
+                                  ? ""
                                   : "${selectedDate!.day}-${selectedDate!.month}-${selectedDate!.year} ${selectedTime!.format(context)}",
                               style: TextStyle(
-                                fontSize: 16,
+                                fontSize: 14,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),

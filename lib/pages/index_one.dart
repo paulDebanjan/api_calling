@@ -30,7 +30,7 @@ class _IndexOneState extends State<IndexOne> {
     List<Todo> todoList = provider.getTodoList;
     print('todolist Lenght: ${todoList.length}');
     return Padding(
-      padding: const EdgeInsets.only(right: 25.0, left: 25, top: 30),
+      padding: const EdgeInsets.only(right: 10.0, left: 10, top: 30),
       child: Column(
         children: [
           // search
@@ -52,7 +52,7 @@ class _IndexOneState extends State<IndexOne> {
           ),
           Expanded(
             child: Container(
-              padding: const EdgeInsets.only(right: 25, left: 25, top: 30),
+              padding: const EdgeInsets.only(right: 10, left: 10, top: 25),
               child: ReorderableListView(
                 buildDefaultDragHandles: false,
                 onReorder: provider.updateMyTiles,
