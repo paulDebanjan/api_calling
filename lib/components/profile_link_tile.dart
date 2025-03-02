@@ -25,7 +25,7 @@ class ProfileLinkTile extends StatelessWidget {
               children: [
                 Icon(iconData),
                 SizedBox(width: 10),
-                Text(text, style: TextStyle(fontSize: 16)),
+                Text(text, style: TextStyle(fontSize: 19)),
               ],
             ),
 

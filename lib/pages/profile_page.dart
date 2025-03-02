@@ -114,7 +114,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       SizedBox(width: 10),
                       Text(
                         'Logout',
-                        style: TextStyle(fontSize: 16, color: Colors.redAccent),
+                        style: TextStyle(fontSize: 19, color: Colors.redAccent),
                       ),
                     ],
                   ),

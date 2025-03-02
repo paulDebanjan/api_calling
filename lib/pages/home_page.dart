@@ -144,7 +144,7 @@ class _HomePageState extends State<HomePage> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
-                      onPressed: () => Navigator.pop(context),
+                      onPressed: () => _pickDateTime(context),
                       icon: Icon(Icons.timer),
                     ),
                     IconButton(
@@ -179,6 +179,34 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
+  DateTime? selectedDate;
+  TimeOfDay? selectedTime;
+  // Function to pick Date
+  Future<void> _pickDateTime(BuildContext context) async {
+    DateTime? pickedDate = await showDatePicker(
+      context: context,
+      initialDate: selectedDate ?? DateTime.now(),
+      firstDate: DateTime(2000),
+      lastDate: DateTime(2100),
+      helpText: "Select a Date", // 🔹 Change the header text
+      confirmText: "Chose Time", // 🔹 Change "OK" button text
+      cancelText: "CANCEL",
+    );
+
+    if (pickedDate != null) {
+      // After selecting a date, show the time picker
+      _pickTime(context, pickedDate);
+    }
+  }
+
+  // Function to pick Time
+  Future<void> _pickTime(BuildContext context, DateTime pickedDate) async {
+    TimeOfDay? pickedTime = await showTimePicker(
+      context: context,
+      initialTime: selectedTime ?? TimeOfDay.now(),
+    );
+  }
+
   @override
   void initState() {
     changeAppBarName();
@@ -207,9 +235,16 @@ class _HomePageState extends State<HomePage> {
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: CircleAvatar(
-              radius: 55,
-              backgroundImage: AssetImage('lib/assets/man.jpg'),
+            child: InkWell(
+              onTap: () {
+                setState(() {
+                  _selectedIndex = 3;
+                });
+              },
+              child: CircleAvatar(
+                radius: 55,
+                backgroundImage: AssetImage('lib/assets/man.jpg'),
+              ),
             ),
           ),
         ],

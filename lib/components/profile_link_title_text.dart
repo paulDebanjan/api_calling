@@ -7,7 +7,7 @@ class ProfileLinkTitleText extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(top: 8.0, bottom: 4),
+      padding: const EdgeInsets.only(top: 2.0, bottom: 4),
       child: Text(
         text,
         style: TextStyle(
