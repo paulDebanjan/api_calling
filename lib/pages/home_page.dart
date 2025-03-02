@@ -2,7 +2,6 @@ import 'package:api_calling/api_work.dart';
 import 'package:api_calling/pages/calendar_page.dart';
 import 'package:api_calling/pages/focuse_page.dart';
 import 'package:api_calling/pages/index_one.dart';
-import 'package:api_calling/pages/index_page.dart';
 import 'package:api_calling/pages/profile_page.dart';
 import 'package:flutter/material.dart';
 
@@ -89,83 +88,106 @@ class _HomePageState extends State<HomePage> {
         WidgetsBinding.instance.addPostFrameCallback(
           (_) => _focusNode.requestFocus(),
         );
-        return Dialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10),
-          ),
-          child: Container(
-            width: MediaQuery.of(context).size.width,
-            padding: const EdgeInsets.all(25),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text('Add Task', style: TextStyle(fontSize: 19)),
-                SizedBox(height: 4),
-                TextField(
-                  controller: _todoNameController,
-                  focusNode: _focusNode,
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.transparent),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-                    hintText: 'Task',
-                    hintStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-                TextField(
-                  controller: _todoDiscriptionController,
-                  decoration: InputDecoration(
-                    enabledBorder: OutlineInputBorder(
-                      borderSide: BorderSide(color: Colors.transparent),
-                    ),
-                    focusedBorder: OutlineInputBorder(
-                      borderSide: BorderSide(
-                        color: Theme.of(context).colorScheme.secondary,
-                      ),
-                    ),
-                    hintText: 'Description',
-                    hintStyle: TextStyle(
-                      color: Theme.of(context).colorScheme.primary,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10),
-
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return Dialog(
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Container(
+                width: MediaQuery.of(context).size.width,
+                padding: const EdgeInsets.all(25),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisSize: MainAxisSize.min,
                   children: [
-                    IconButton(
-                      onPressed: () => _pickDateTime(context),
-                      icon: Icon(Icons.timer),
+                    Text('Add Task', style: TextStyle(fontSize: 19)),
+                    SizedBox(height: 4),
+                    TextField(
+                      controller: _todoNameController,
+                      focusNode: _focusNode,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                        hintText: 'Task',
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
                     ),
-                    IconButton(
-                      onPressed: () async {
-                        if (_todoNameController.text.isNotEmpty) {
-                          await createTodo(
-                            _todoNameController.text,
-                            false,
-                            context,
-                          );
-                          _todoNameController.clear();
-                        }
-                        Navigator.pop(context);
-                      },
-                      icon: Icon(Icons.send, color: Colors.lightBlue),
+                    SizedBox(height: 10),
+                    TextField(
+                      controller: _todoDiscriptionController,
+                      decoration: InputDecoration(
+                        enabledBorder: OutlineInputBorder(
+                          borderSide: BorderSide(color: Colors.transparent),
+                        ),
+                        focusedBorder: OutlineInputBorder(
+                          borderSide: BorderSide(
+                            color: Theme.of(context).colorScheme.secondary,
+                          ),
+                        ),
+                        hintText: 'Description',
+                        hintStyle: TextStyle(
+                          color: Theme.of(context).colorScheme.primary,
+                        ),
+                      ),
+                    ),
+                    SizedBox(height: 10),
+
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            IconButton(
+                              onPressed:
+                                  () => _pickDateTime(context, setStateDialog),
+                              icon: Icon(Icons.timer),
+                            ),
+                            Text(
+                              // <- THIS TEXT WIDGET NEEDS TO BE UPDATED
+                              selectedDate == null || selectedTime == null
+                                  ? "Select Date & Time"
+                                  : "${selectedDate!.day}-${selectedDate!.month}-${selectedDate!.year} ${selectedTime!.format(context)}",
+                              style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                              ),
+                            ),
+                          ],
+                        ),
+                        IconButton(
+                          onPressed: () async {
+                            if (_todoNameController.text.isNotEmpty) {
+                              await createTodo(
+                                _todoNameController.text,
+                                false,
+                                context,
+                              );
+                              _todoNameController.clear();
+                            }
+                            setState(() {
+                              selectedDate = null;
+                              selectedTime = null;
+                            });
+                            Navigator.pop(context);
+                          },
+                          icon: Icon(Icons.send, color: Colors.lightBlue),
+                        ),
+                      ],
                     ),
                   ],
                 ),
-              ],
-            ),
-          ),
+              ),
+            );
+          },
         );
       },
     );
@@ -182,7 +204,10 @@ class _HomePageState extends State<HomePage> {
   DateTime? selectedDate;
   TimeOfDay? selectedTime;
   // Function to pick Date
-  Future<void> _pickDateTime(BuildContext context) async {
+  Future<void> _pickDateTime(
+    BuildContext context,
+    Function setStateDialog,
+  ) async {
     DateTime? pickedDate = await showDatePicker(
       context: context,
       initialDate: selectedDate ?? DateTime.now(),
@@ -194,17 +219,31 @@ class _HomePageState extends State<HomePage> {
     );
 
     if (pickedDate != null) {
+      print(pickedDate);
       // After selecting a date, show the time picker
-      _pickTime(context, pickedDate);
+      _pickTime(context, pickedDate, setStateDialog);
     }
   }
 
   // Function to pick Time
-  Future<void> _pickTime(BuildContext context, DateTime pickedDate) async {
+  Future<void> _pickTime(
+    BuildContext context,
+    DateTime pickedDate,
+    Function setStateDialog,
+  ) async {
     TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: selectedTime ?? TimeOfDay.now(),
     );
+
+    if (pickedTime != null) {
+      print(pickedTime);
+      setState(() {
+        selectedDate = pickedDate;
+        selectedTime = pickedTime;
+      });
+      setStateDialog(() {});
+    }
   }
 
   @override
