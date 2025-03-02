@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 class TaskProvider extends ChangeNotifier {
   List<Todo> _todoList = [];
 
+  String _searchQuery = '';
   // get
-  List<Todo> get getTodoList => _todoList;
+  // List<Todo> get getTodoList => _todoList;
 
   // set list from api
   void intializeList(List<Todo> todo) {
@@ -17,6 +18,22 @@ class TaskProvider extends ChangeNotifier {
   // set list from api
   void setTodoList(List<Todo> todo) {
     _todoList.addAll(todo);
+    notifyListeners();
+  }
+
+  List<Todo> get getTodoList {
+    return _searchQuery.isEmpty
+        ? _todoList
+        : _todoList
+            .where(
+              (todo) =>
+                  todo.todo.toLowerCase().contains(_searchQuery.toLowerCase()),
+            )
+            .toList();
+  }
+
+  void searchTodo(String query) {
+    _searchQuery = query;
     notifyListeners();
   }
 

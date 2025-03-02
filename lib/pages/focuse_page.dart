@@ -10,6 +10,13 @@ class FocusePage extends StatefulWidget {
 class _FocusePageState extends State<FocusePage> {
   @override
   Widget build(BuildContext context) {
-    return Center(child: Text('Focus'));
+    return Center(
+      child: Container(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [Image.asset('lib/assets/index.jpg', width: 300)],
+        ),
+      ),
+    );
   }
 }

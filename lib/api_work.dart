@@ -5,6 +5,7 @@ import 'package:api_calling/pages/home_page.dart';
 import 'package:api_calling/pages/login_page.dart';
 import 'package:api_calling/providers/task_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:provider/provider.dart';
@@ -45,16 +46,23 @@ Future<void> login(
     showDialog(
       context: context,
       builder:
-          (context) => AlertDialog(
-            content: Text('Username or password is wrong'),
-            actions: [
-              MaterialButton(
-                onPressed: () {
-                  Navigator.pop(context);
-                },
-                child: Text('Ok'),
-              ),
-            ],
+          (context) => RawKeyboardListener(
+            focusNode: FocusNode(),
+            autofocus: true,
+            onKey: (event) {
+              Navigator.pop(context);
+            },
+            child: AlertDialog(
+              content: Text('Username or password is wrong'),
+              actions: [
+                MaterialButton(
+                  onPressed: () {
+                    Navigator.pop(context);
+                  },
+                  child: Text('Ok'),
+                ),
+              ],
+            ),
           ),
     );
   }

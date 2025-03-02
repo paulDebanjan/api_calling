@@ -1,9 +1,9 @@
 import 'package:api_calling/api_work.dart';
+import 'package:api_calling/components/my_drawer.dart';
 import 'package:api_calling/pages/calendar_page.dart';
 import 'package:api_calling/pages/focuse_page.dart';
-import 'package:api_calling/pages/index_one.dart';
+import 'package:api_calling/pages/index_page.dart';
 import 'package:api_calling/pages/profile_page.dart';
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
 
 class HomePage extends StatefulWidget {
@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> screens = [
     // IndexPage(),
-    IndexOne(),
+    IndexPage(),
     CalendarPage(),
     FocusePage(),
     ProfilePage(),
@@ -51,28 +51,33 @@ class _HomePageState extends State<HomePage> {
   }
 
   Widget buildNavBarItem(IconData icon, String label, int index) {
-    return InkWell(
-      onTap: () => _onItemPapped(index),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Icon(
-            icon,
-            color:
-                _selectedIndex == index
-                    ? Colors.blue
-                    : Theme.of(context).colorScheme.inversePrimary,
+    return Expanded(
+      child: InkWell(
+        borderRadius: BorderRadius.circular(6),
+        onTap: () => _onItemPapped(index),
+        child: Container(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Icon(
+                icon,
+                color:
+                    _selectedIndex == index
+                        ? Colors.blue
+                        : Theme.of(context).colorScheme.inversePrimary,
+              ),
+              Text(
+                label,
+                style: TextStyle(
+                  color:
+                      _selectedIndex == index
+                          ? Colors.blue
+                          : Theme.of(context).colorScheme.inversePrimary,
+                ),
+              ),
+            ],
           ),
-          Text(
-            label,
-            style: TextStyle(
-              color:
-                  _selectedIndex == index
-                      ? Colors.blue
-                      : Theme.of(context).colorScheme.inversePrimary,
-            ),
-          ),
-        ],
+        ),
       ),
     );
   }
@@ -178,6 +183,9 @@ class _HomePageState extends State<HomePage> {
                               selectedTime = null;
                             });
                             Navigator.pop(context);
+                            setState(() {
+                              _selectedIndex = 0;
+                            });
                           },
                           icon: Icon(Icons.send, color: Colors.lightBlue),
                         ),
@@ -268,10 +276,6 @@ class _HomePageState extends State<HomePage> {
           style: TextStyle(color: Theme.of(context).colorScheme.inversePrimary),
         ),
         centerTitle: true,
-        leading: IconButton(
-          onPressed: () => logout(context),
-          icon: Icon(Icons.logout),
-        ),
         actions: [
           Padding(
             padding: const EdgeInsets.all(8.0),
@@ -289,6 +293,7 @@ class _HomePageState extends State<HomePage> {
           ),
         ],
       ),
+      drawer: MyDrawer(),
       body: screens[_selectedIndex],
       floatingActionButton: FloatingActionButton(
         backgroundColor: const Color.fromARGB(255, 134, 135, 231),
@@ -306,7 +311,7 @@ class _HomePageState extends State<HomePage> {
           children: [
             buildNavBarItem(Icons.home, 'Index', 0),
             buildNavBarItem(Icons.calendar_month, 'Calender', 1),
-            SizedBox(width: 20),
+            Spacer(),
             buildNavBarItem(Icons.timelapse, 'Focus', 2),
             buildNavBarItem(Icons.person, 'Profile', 3),
           ],
