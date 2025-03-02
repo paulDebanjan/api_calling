@@ -40,6 +40,7 @@ class TaskProvider extends ChangeNotifier {
   // update
   void updatCheckbox(int id, bool isComplete) {
     int index = _todoList.indexWhere((todo) => todo.id == id);
+    print(index);
     if (index != -1) {
       _todoList[index] = _todoList[index].copyWith(completed: isComplete);
     }
@@ -49,6 +50,7 @@ class TaskProvider extends ChangeNotifier {
   // delete
   void deleteTodoFromList(int id) {
     int index = _todoList.indexWhere((todo) => todo.id == id);
+    print(index);
     if (index != -1) {
       _todoList.removeAt(index);
     }

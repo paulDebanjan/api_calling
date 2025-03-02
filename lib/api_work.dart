@@ -91,6 +91,7 @@ Future<void> featchUserInfo() async {
   );
   if (response.statusCode == 200) {
     final data = jsonDecode(response.body);
+
     final fullName = data['firstName'] + ' ' + data['lastName'];
     await storage.write(key: 'userName', value: fullName);
   } else {
@@ -111,6 +112,7 @@ Future<void> initialReadUserTodo(BuildContext context) async {
     List<dynamic> todoJsonList = responseData['todos'];
     // convert to todo model
     List<Todo> todos = todoJsonList.map((item) => Todo.fromJson(item)).toList();
+    print('iniial: $todos');
 
     Provider.of<TaskProvider>(context, listen: false).intializeList(todos);
   } else {
@@ -156,6 +158,7 @@ Future<void> createTodo(
 
   if (response.statusCode == 201) {
     List<Todo> todos = parseTodos(response.body);
+    print('create:$todos');
     try {
       Provider.of<TaskProvider>(context, listen: false).setTodoList(todos);
     } catch (e) {
@@ -168,6 +171,7 @@ Future<void> createTodo(
 
 // update a todo
 Future<void> isCompleteButtonUpdate(int id, bool isComplete, context) async {
+  print(id);
   final url = Uri.parse('https://dummyjson.com/todos/${id}');
 
   final response = await http.put(
@@ -176,6 +180,7 @@ Future<void> isCompleteButtonUpdate(int id, bool isComplete, context) async {
     body: jsonEncode({'completed': isComplete}),
   );
   print('UpdateMethod: ${response.statusCode}');
+  print('Update ${response.body}');
 
   // created todo not available in api server for that resion
   // 'if' condition will not work on local created todo
@@ -190,6 +195,7 @@ Future<void> isCompleteButtonUpdate(int id, bool isComplete, context) async {
 // delete a todo
 Future<void> deleteTodo(int id, context) async {
   final url = Uri.parse('https://dummyjson.com/todos/${id}');
+  print('delete: $id');
   // int idInt = int.parse(id);
   final response = await http.delete(url);
   // if (response.statusCode == 200) {

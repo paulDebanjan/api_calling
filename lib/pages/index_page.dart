@@ -58,7 +58,7 @@ class _IndexPageState extends State<IndexPage> {
                   Icons.search,
                   color: Theme.of(context).colorScheme.primary,
                 ),
-                hintText: 'Todo Title',
+                hintText: 'Search',
                 fillColor: Theme.of(context).colorScheme.inversePrimary,
                 filled: true,
                 hintStyle: TextStyle(
@@ -85,7 +85,7 @@ class _IndexPageState extends State<IndexPage> {
                         onReorder: provider.updateMyTiles,
                         children: [
                           for (int i = 0; i < todoList.length; i++)
-                            ReorderableDragStartListener(
+                            ReorderableDelayedDragStartListener(
                               // Enables dragging from anywhere
                               key: ValueKey('${todoList[i].id}_$i'),
                               index: i,
